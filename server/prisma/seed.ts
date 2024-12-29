@@ -1,25 +1,28 @@
 import  { PrismaClient } from "@prisma/client"
-import faker from "@faker-js/faker"
+import { faker } from "@faker-js/faker"
 const prisma  = new PrismaClient()
 
 
 async function main () {
-    console.log("seeding")
+    const randomCartID = faker.string.uuid()
+for(let i =0; i<100; i++) {
     await prisma.item.create({
         data : {
-            name : "Example item",          
-            price : 6000 ,         
-            stockQuantity : 7, 
+            name: faker.commerce.productName(), 
+            price: parseFloat(faker.commerce.price()), 
+            stockQuantity: faker.number.int({ min: 1, max: 100 }), 
             ItemsOnCart : {
                 create : [
                     {
-                        cartID : "exmaple id",
-                        quantity : 2
+                        cartID : randomCartID,
+                        quantity : faker.number.int({ min: 1, max: 10 })
                     }
                 ]
             },   
         }
     })
+}
+
 }
 
 main().catch(e => {
